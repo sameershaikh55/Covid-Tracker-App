@@ -12,6 +12,7 @@ import GraphTwo from './Components/GraphTwo';
 import Footer from './Components/Footer';
 import { CountUp } from 'use-count-up';
 import { sortData } from './util';
+import CircularProgress from '@material-ui/core/CircularProgress';
 // import { Line } from 'react-chartjs-2';
 
 // const useStyles = makeStyles((theme) => ({
@@ -48,6 +49,9 @@ function App() {
   // for show data above graph 2
   let [showCountry, setShowCountry] = useState("Worlwide");
 
+  // for lazy loading
+  let [loading, setLoading] = useState(false);
+
   // for states data
   // let [stats, setStats] = useState([]);
 
@@ -58,7 +62,7 @@ function App() {
   // for change state and data in the state
   const updateData = async (event) => {
     const listning = event.target.value;
-    
+    setLoading(true)
     const url = listning === "Worldwide" ? 
                 `https://disease.sh/v3/covid-19/all` : 
                 `https://disease.sh/v3/covid-19/countries/${listning}`;
@@ -68,6 +72,7 @@ function App() {
     setDropDownChange(data);
     setDropDown(listning);
     setShowCountry(data.country);
+    setLoading(false)
     // consoles
     // console.log("data ternery" +data);
     // console.log(` listning ${listning}`);
@@ -77,11 +82,13 @@ function App() {
   // for states data
   useEffect(() => {
     const getData = async () => {
+      setLoading(true)
       const response = await fetch("https://disease.sh/v3/covid-19/all");
       const data = await response.json();
       // console.log(data);
       setDropDownChange(data);
       setShowCountry("Worldwide");
+      setLoading(false)
     }
     getData();      
   }, [])
@@ -89,15 +96,20 @@ function App() {
   // for country listing
   useEffect(() => {
     const getData = async () => {
+      setLoading(true)
       const response = await fetch("https://disease.sh/v3/covid-19/countries");
       const data = await response.json();
       // console.log(data);
       let sortedData = sortData(data);
       setCountryList(sortedData);
       setDropDownList(data);
+      setLoading(false)
     } 
     getData();    
   }, [])
+
+  // for suspense (lazy loading)
+  const lazyLoading = <CircularProgress style={{ color: "rgba(0,0,0,0.6)", zoom: "0.6" }} />;
 
   return (
     <div className="page_container">
@@ -117,6 +129,115 @@ function App() {
       </div>
       <div className="states_container">
         <div className="fcolumn">
+          {loading ? 
+          <div className="states">
+            <div className="card_root">
+              <div className="stats_cards" style={{ borderBottom: "14px solid rgba(0, 0, 255, 0.6)",
+                                                  borderTop: "2px solid rgba(0, 0, 255, 0.6)" }} >
+                <div className="card" >
+                  <Typography style={{ letterSpacing: '2px',
+                                      fontSize: '22px',
+                                      fontFamily: "'Nunito Sans', sans-serif",
+                                      fontWeight: '800', 
+                                    }} 
+                              variant={'h6'}>
+                      Cases 
+                  </Typography>
+
+                  <Typography variant={'h6'} 
+                              style={{ fontFamily: "'Work Sans', sans-serif",
+                                      fontSize: "22px",
+                                      fontWeight: 'bolder',
+                                      marginBottom: '2px' 
+                                    }} 
+                  >   
+                    {lazyLoading}
+                  </Typography>
+
+                  <Typography> ({yesterday.toDateString()}) </Typography>
+
+                  <h4 style={{ fontFamily: "'Work Sans', sans-serif",
+                              fontWeight: "lighter",
+                              fontSize: "20px",
+                            }}>
+                    {lazyLoading}
+                    <strong style={{ fontFamily: "'Nunito Sans', sans-serif"  }}> Total </strong> 
+                  </h4>
+                </div>
+              </div>
+            </div>
+            <div className="card_root">
+              <div className="stats_cards" style={{ borderBottom: "14px solid rgba(0, 255, 0, 0.6)",
+                                                  borderTop: "2px solid rgba(0, 255, 0, 0.6)" }}>
+                <div className="card" >
+                  <Typography style={{ letterSpacing: '2px',
+                                      fontSize: '22px',
+                                      fontFamily: "'Nunito Sans', sans-serif",
+                                      fontWeight: '800', 
+                                    }} 
+                              variant={'h6'}>
+                      Recovered 
+                  </Typography>
+
+                  <Typography variant={'h6'} 
+                              style={{ fontFamily: "'Work Sans', sans-serif",
+                                      fontSize: "22px",
+                                      fontWeight: 'bolder',
+                                      marginBottom: '2px' 
+                                    }} 
+                  >   
+                    {lazyLoading}
+                  </Typography>
+
+                  <Typography> ({yesterday.toDateString()}) </Typography>
+
+                  <h4 style={{ fontFamily: "'Work Sans', sans-serif",
+                              fontWeight: "lighter",
+                              fontSize: "20px",
+                            }}> 
+                      {lazyLoading}  
+                    <strong style={{ fontFamily: "'Nunito Sans', sans-serif"  }}> Total </strong> 
+                  </h4>
+                </div>
+              </div>
+            </div>
+            <div className="card_root">
+              <div className="stats_cards" style={{ borderBottom: "14px solid rgba(255, 0, 0, 0.6)", 
+                                                  borderTop: "2px solid rgba(255, 0, 0, 0.6)" 
+                                                }}>
+                <div className="card">
+                  <Typography style={{ letterSpacing: '2px',
+                                      fontSize: '22px',
+                                      fontFamily: "'Nunito Sans', sans-serif",
+                                      fontWeight: '800', 
+                                    }} 
+                              variant={'h6'}>
+                      Deaths 
+                  </Typography>
+
+                  <Typography variant={'h6'} 
+                              style={{ fontFamily: "'Work Sans', sans-serif",
+                                      fontSize: "22px",
+                                      fontWeight: 'bolder',
+                                      marginBottom: '2px' 
+                                    }} 
+                  >    
+                    {lazyLoading} 
+                  </Typography>
+
+                  <Typography> ({yesterday.toDateString()}) </Typography>
+
+                  <h4 style={{ fontFamily: "'Work Sans', sans-serif",
+                              fontWeight: "lighter",
+                              fontSize: "20px",
+                            }}> 
+                      {lazyLoading}  
+                    <strong style={{ fontFamily: "'Nunito Sans', sans-serif"  }}> Total </strong> 
+                  </h4>
+                </div>
+              </div>
+            </div>
+          </div> :
           <div className="states">
             <div className="card_root">
               <div className="stats_cards" style={{ borderBottom: "14px solid rgba(0, 0, 255, 0.6)",
@@ -147,7 +268,7 @@ function App() {
                               fontWeight: "lighter",
                               fontSize: "20px",
                             }}>
-                    <CountUp isCounting end={dropDownChange.cases} duration={3} thousandsSeparator="," />
+                      <CountUp isCounting end={dropDownChange.cases} duration={3} thousandsSeparator="," />
                     <strong style={{ fontFamily: "'Nunito Sans', sans-serif"  }}> Total </strong> 
                   </h4>
                 </div>
@@ -224,7 +345,7 @@ function App() {
                 </div>
               </div>
             </div>
-          </div>
+          </div> }
             <div className="graph_two">
               <GraphTwo confirmed={dropDownChange.cases} 
                         recovered={dropDownChange.recovered} 
@@ -240,8 +361,8 @@ function App() {
               {countryList.map((preVal) => {
                 return <CountriesList 
                           key={preVal.countryInfo._id}
-                          cName={preVal.country} 
-                          cCases={preVal.cases}
+                            cName={preVal.country} 
+                            cCases={preVal.cases}
                         />
               })}
             </div>
