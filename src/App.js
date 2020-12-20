@@ -192,7 +192,7 @@ function App() {
 											<strong
 												style={{ fontFamily: "'Nunito Sans', sans-serif" }}
 											>
-												Total
+												&nbsp; Total
 											</strong>
 										</h4>
 									</div>
@@ -244,7 +244,7 @@ function App() {
 											<strong
 												style={{ fontFamily: "'Nunito Sans', sans-serif" }}
 											>
-												Total
+												&nbsp; Total
 											</strong>
 										</h4>
 									</div>
@@ -296,7 +296,7 @@ function App() {
 											<strong
 												style={{ fontFamily: "'Nunito Sans', sans-serif" }}
 											>
-												Total
+												&nbsp; Total
 											</strong>
 										</h4>
 									</div>
@@ -355,13 +355,13 @@ function App() {
 											<CountUp
 												isCounting
 												end={dropDownChange.cases}
-												duration={3}
+												duration={4}
 												thousandsSeparator=","
 											/>
 											<strong
 												style={{ fontFamily: "'Nunito Sans', sans-serif" }}
 											>
-												Total
+												&nbsp;Total
 											</strong>
 										</h4>
 									</div>
@@ -417,13 +417,13 @@ function App() {
 											<CountUp
 												isCounting
 												end={dropDownChange.recovered}
-												duration={3}
+												duration={4}
 												thousandsSeparator=","
 											/>
 											<strong
 												style={{ fontFamily: "'Nunito Sans', sans-serif" }}
 											>
-												Total
+												&nbsp;Total
 											</strong>
 										</h4>
 									</div>
@@ -479,13 +479,13 @@ function App() {
 											<CountUp
 												isCounting
 												end={dropDownChange.deaths}
-												duration={3}
+												duration={4}
 												thousandsSeparator=","
 											/>
 											<strong
 												style={{ fontFamily: "'Nunito Sans', sans-serif" }}
 											>
-												Total
+												&nbsp;Total
 											</strong>
 										</h4>
 									</div>
